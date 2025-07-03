@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Open MyStylist Partner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      const deepLink = 'mystylistpartner://profile'; // <- your custom scheme
+
+      const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.mystylistexpert&hl=en_IN';
+      const APP_STORE_URL = 'https://apps.apple.com/us/app/mystylist-partner/id6474432144';
+
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      const isAndroid = /android/i.test(userAgent);
+      const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+
+      // Try opening app
+      window.location = deepLink;
+
+      // Fallback to store after delay
+      setTimeout(() => {
+        if (isAndroid) {
+          window.location.href = PLAY_STORE_URL;
+        } else if (isIOS) {
+          window.location.href = APP_STORE_URL;
+        } else {
+          document.body.innerHTML = '<p style="text-align:center;padding-top:40px;">Please open this link on your mobile device.</p>';
+        }
+      }, 1500); // Adjust if needed
+    </script>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #333;
+        padding: 20px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Opening the MyStylist Partner app...</p>
+  </body>
+</html>
