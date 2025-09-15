@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Open MyStylist App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: sans-serif; text-align: center; padding-top: 50px; }
+    #status-message { font-size: 1.2em; color: #333; }
+    #fallback-link { display: none; margin-top: 20px; }
+    .loader { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 9999;
+              background: url(assets/img/loader.gif) no-repeat center #fff; background-size: 50px; }
+  </style>
+</head>
+<body>
+  <div class="loader" id="pageLoader"></div>
+  <p id="status-message">Opening the MyStylist app...</p>
+
+  <div id="fallback-link">
+    <a href="#" onclick="openApp(); return false;">Try Again</a>
+    <br><br>
+    <a href="https://play.google.com/store/apps/details?id=com.mystylist.user" target="_blank">
+      Get the app on Google Play
+    </a>
+    <br><br>
+    <a href="https://apps.apple.com/us/app/mystylist-book-a-stylist/id6475633914" target="_blank">
+      Get the app on the App Store
+    </a>
+  </div>
+
+  <script>
+    const currentUrl = window.location.href;
+    const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.mystylist.user";
+    const APP_STORE_URL = "https://apps.apple.com/us/app/mystylist-book-a-stylist/id6475633914";
+
+    function openApp() {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      const isAndroid = /android/i.test(userAgent);
+      const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+
+      const url = new URL(currentUrl);
+      const query = url.search || "";
+      const deepLink = `mystylist://profile${query}`;
+
+      if (isIOS) {
+        window.location = deepLink;
+        setTimeout(() => { window.location.href = APP_STORE_URL; }, 1500);
+
+      } else if (isAndroid) {
+        const fallback = encodeURIComponent(PLAY_STORE_URL);
+        const intentUrl =
+          `intent://profile${query}#Intent;scheme=mystylist;package=com.mystylist.user;S.browser_fallback_url=${fallback};end`;
+        window.location.replace(intentUrl);
+
+      } else {
+        document.getElementById("status-message").textContent =
+          "Please open this link on your mobile device.";
+        document.getElementById("fallback-link").style.display = "block";
+      }
+    }
+
+    window.addEventListener("load", () => {
+      openApp();
+      document.getElementById("pageLoader").style.display = "none";
+    });
+  </script>
+</body>
+</html>

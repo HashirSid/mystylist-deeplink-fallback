@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.mystylist.user",
+      "sha256_cert_fingerprints": [
+        "E5:07:C2:0A:9A:FE:EC:26:6F:CA:55:88:38:12:B7:AF:C7:A8:73:D6:59:92:8C:B1:6D:D8:31:48:D4:AA:2B:55"
+      ]
+    }
+  }
+]

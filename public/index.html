@@ -1,0 +1,43 @@
+<script>
+  const currentUrl = window.location.href;
+  const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.mystylist.user";
+  const APP_STORE_URL = "https://apps.apple.com/us/app/mystylist-book-a-stylist/id6475633914";
+
+  function openApp() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    const isAndroid = /android/i.test(userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+
+    // Extract query params (like stylistCode) if any
+    const url = new URL(currentUrl);
+    const query = url.search || "";
+    const deepLink = `mystylist://profile${query}`;
+
+    if (isIOS) {
+      // Try deep link
+      window.location = deepLink;
+
+      // Fallback to App Store
+      setTimeout(() => {
+        window.location.href = APP_STORE_URL;
+      }, 1500);
+
+    } else if (isAndroid) {
+      // Use intent with fallback
+      const fallback = encodeURIComponent(PLAY_STORE_URL);
+      const intentUrl = `intent://profile${query}#Intent;scheme=mystylist;package=com.mystylist.user;S.browser_fallback_url=${fallback};end`;
+      window.location.replace(intentUrl);
+
+    } else {
+      // Non-mobile device
+      document.getElementById("status-message").textContent =
+        "Please open this link on your mobile device.";
+      document.getElementById("fallback-link").style.display = "block";
+    }
+  }
+
+  window.addEventListener("load", () => {
+    openApp();
+    document.getElementById("pageLoader").style.display = "none";
+  });
+</script>
